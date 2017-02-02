@@ -1,9 +1,9 @@
 module App exposing (..)
 
 import Html exposing (div, ul, li, button, text, Html)
-import Html.Attributes exposing (style)
+import Html.Attributes exposing (style, attribute)
 import Html.Attributes exposing (class)
-import Html.Events exposing (onInput, onClick)
+import Html.Events exposing (onInput, onClick, targetValue)
 import List exposing (..)
 import Http
 import Chess.Color exposing (..)
@@ -24,43 +24,46 @@ main =
 type alias Model = {
     stepNumber : Int
     }
+type alias Context = { model: Model, dom: Int}
+
 init :(Model, Cmd Msg)
 init  =
   ( Model 0
   , Cmd.none
   )
 -- UPDATE
-type Msg
-    = GameCreated (Result Http.Error String)
-    | GameCreate
-
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
-      GameCreate ->
+      Chess.GameCreate ->
         (Model 1, Cmd.none)
-
-      GameCreated (Ok newUrl) ->
+      Chess.ClickSquare ->
+        (Model 2, Cmd.none)
+      Chess.MovePart ->
         (model, Cmd.none)
 
-      GameCreated (Err _) ->
-        (model, Cmd.none)
 -- SUBSCRIPTIONS
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.none
 
+-- VIEW
 view : Model -> Html Msg
 view model =
   if model.stepNumber == 1 then
     board
+  else if model.stepNumber == 2 then
+    move model
   else
     div []
       [ button [ onClick GameCreate ] [ text "Start" ]]
 
-startGame = div []
-    [board
-    ]
-board = div []
+board = div [ attribute "id" "gameboard"]
+        [ Chess.board config
+        ]
+move: Model -> Html Msg
+move model =
+    Debug.log model
+    div [ attribute "id" "gameboard"]
         [ Chess.board config
         ]

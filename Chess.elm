@@ -2,12 +2,21 @@ module Chess exposing (..)
 
 import Html exposing (div, ul, li, text, Html)
 import Html.Attributes exposing (style, class, attribute)
+import Html.Events exposing (onClick)
 import Chess.Color exposing (showColor, Color(White, Black), oppositeColor)
 import Chess.Field exposing (..)
 import Chess.Board exposing (Board, initBoard)
 import Chess.Parts exposing (showPart, Part, showPartChar)
 import List exposing (..)
 import Dict exposing (..)
+
+
+-- UPDATE
+type Msg
+    = MovePart
+    | ClickSquare String
+    | GameCreate
+
 
 {- config -}
 type alias Config = { size: Int, white : Color, black : Color}
@@ -34,22 +43,20 @@ initCounter : Counter
 initCounter = {tile = 0}
 counter = initCounter
 
-board: Config -> Html msg
+board: Config -> Html Msg
 board config =
     let
         colStyle =
             ( "display", "inline-block" )
     in
-        div []
-            [
-            div
-            [ style
-                [ ( "font-size", "250%" )
-                , ( "text-align", "center" )
-                , ( "line-height", "1.2" )
-                ]
+        div
+        [ style
+            [ ( "font-size", "250%" )
+            , ( "text-align", "center" )
+            , ( "line-height", "1.2" )
             ]
-            (board_ config 1 initBoard config.black)
+        ]
+        (board_ config 1 initBoard config.black)
 --            (concat
 --                (repeat 4
 --                    [ div [ style [ colStyle ] ] (concat (repeat 4 [ square config (showColor config.white ), square config (showColor config.black) ]))
@@ -57,9 +64,8 @@ board config =
 --                    ]
 --                )
 --            )
-            ]
 
-board_: Config -> Int -> Board -> Color -> List (Html msg)
+board_: Config -> Int -> Board -> Color -> List (Html Msg)
 board_ config position dicBoard color=
     if position < 9 then
         let
@@ -71,7 +77,7 @@ board_ config position dicBoard color=
     else
        [div[][]]
 
-rowSquare: Config -> Int -> Int -> Board -> Color -> List(Html msg)
+rowSquare: Config -> Int -> Int -> Board -> Color -> List(Html Msg)
 rowSquare config col row dicBoard color =
     if row < 9 then
         let
@@ -83,7 +89,7 @@ rowSquare config col row dicBoard color =
     else
        [div[][]]
 
-square: Config -> String -> Maybe Part -> Int -> Int -> Html msg
+square: Config -> String -> Maybe Part -> Int -> Int -> Html Msg
 square config color part col row =
         div
             [ style
@@ -93,5 +99,6 @@ square config color part col row =
                 ]
              , attribute "data-square" (showField <| field col row)
              , attribute "data-part" (showPartChar <| part)
+             , onClick ClickSquare
             ]
             [text (showPart part)]
