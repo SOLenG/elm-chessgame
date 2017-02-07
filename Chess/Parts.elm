@@ -1,4 +1,4 @@
-module Chess.Parts exposing (part, Part, PartType(..), showPart, showPartChar)
+module Chess.Parts exposing (part, Part, PartType(..), showPart, showPartChar, CanMove, Move)
 
 import String exposing (cons, fromChar)
 import Char exposing (fromCode)
@@ -86,6 +86,9 @@ showPartChar part =
 
 
 -- Moves
+type alias Move = { x : Int, y : Int }
+type alias CanMove = {moves : (List Move)}
+
 directionsB = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
 directionsR = [(0, 1), (0, -1), (1, 0), (-1, 0)]
 directionsN = [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)]

@@ -1,0 +1,11 @@
+c:\users\leolebogoss\documents\visual studio 2015\Projects\back_end\back_end\bin\Debug\back_end.exe.config
+c:\users\leolebogoss\documents\visual studio 2015\Projects\back_end\back_end\bin\Debug\back_end.XML
+c:\users\leolebogoss\documents\visual studio 2015\Projects\back_end\back_end\bin\Debug\back_end.exe
+c:\users\leolebogoss\documents\visual studio 2015\Projects\back_end\back_end\bin\Debug\back_end.pdb
+c:\users\leolebogoss\documents\visual studio 2015\Projects\back_end\back_end\bin\Debug\FSharp.Core.dll
+c:\users\leolebogoss\documents\visual studio 2015\Projects\back_end\back_end\bin\Debug\Suave.dll
+c:\users\leolebogoss\documents\visual studio 2015\Projects\back_end\back_end\bin\Debug\FSharp.Core.xml
+c:\users\leolebogoss\documents\visual studio 2015\Projects\back_end\back_end\bin\Debug\Suave.xml
+c:\users\leolebogoss\documents\visual studio 2015\Projects\back_end\back_end\obj\Debug\back_end.fsproj.back_end.exe.config
+c:\users\leolebogoss\documents\visual studio 2015\Projects\back_end\back_end\obj\Debug\back_end.exe
+c:\users\leolebogoss\documents\visual studio 2015\Projects\back_end\back_end\obj\Debug\back_end.pdb

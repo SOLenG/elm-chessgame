@@ -9,7 +9,9 @@ import Http exposing (..)
 import Json.Decode as Decode
 import Mouse
 import Chess.Color exposing (..)
+import Chess.Parts exposing (CanMove, Move)
 import Chess exposing (..)
+import Messages exposing (..)
 
 {- Config-}
 --config = Chess.defaultConfig
@@ -23,26 +25,32 @@ main =
       , update = update
       , subscriptions = subscriptions
       }
+
 type alias Model = {
     stepNumber : Int
-    , position : (Int, Int)
+    , position : (Int, Int, String)
+    , moves : CanMove
     }
 type alias Context = { model: Model, dom: Int}
 
 init :(Model, Cmd Msg)
 init  =
-  ( Model 0 (0,0)
+  ( Model 0 (0,0, "", [(-1,-1)])
   , Cmd.none
   )
 -- UPDATE
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
-      Chess.GameCreate ->
-        (Model 1 (0,0), Cmd.none)
-      Chess.ClickSquare position ->
-        (Model 2 position, Cmd.none)
-      Chess.MovePart ->
+      GameCreate ->
+        (Model 1 (0,0, "") [(-1,-1)], Cmd.none)
+      ClickSquare position ->
+        (Model 2 position [(-1,-1)], Cmd.none)
+      MovePart ->
+        (model, Cmd.none)
+      GameSquareSelected (Ok moves) ->
+        (Model model.stepNumber model.position moves, Cmd.none)
+      GameSquareSelected (Err error) ->
         (model, Cmd.none)
 
 -- SUBSCRIPTIONS
@@ -75,3 +83,17 @@ move model =
         div [ attribute "id" "gameboard"]
         [ Chess.board config
         ]
+
+-- HTTP
+apiCreateGame : (Int, (Int, Int, Int)) -> Cmd Msg
+apiCreateGame (stepNumber, (x,y,name)) =
+  let
+    url =
+      "http://localhost:8080/call?x=" ++ x ++ "&y=" ++ y ++ "&name=" ++ name
+  in
+    Http.send GameSquareSelected (Http.get url decodeApiResponse)
+
+
+decodeApiResponse : Decode.Decoder String
+decodeApiResponse =
+  Decode.at ["data", "image_url"] Decode.string

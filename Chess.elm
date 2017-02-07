@@ -11,13 +11,6 @@ import List exposing (..)
 import Dict exposing (..)
 import Mouse exposing (..)
 
--- UPDATE
-type Msg
-    = MovePart
-    | ClickSquare (Int, Int)
-    | GameCreate
-
-
 {- config -}
 type alias Config = { size: Int, white : Color, black : Color}
 defaultConfig: Config
@@ -99,7 +92,7 @@ square config color part col row =
                 ]
              , attribute "data-square" (showField <| field col row)
              , attribute "data-part" (showPartChar <| part)
-             , onClick (ClickSquare (col, row))
+             , onClick (ClickSquare (col, row, showPartChar <| part))
              --, onClick [ClickSquare]
             ]
             [text (showPart part)]
