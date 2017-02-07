@@ -9,12 +9,12 @@ import Chess.Board exposing (Board, initBoard)
 import Chess.Parts exposing (showPart, Part, showPartChar)
 import List exposing (..)
 import Dict exposing (..)
-
+import Mouse exposing (..)
 
 -- UPDATE
 type Msg
     = MovePart
-    | ClickSquare String
+    | ClickSquare (Int, Int)
     | GameCreate
 
 
@@ -43,7 +43,7 @@ initCounter : Counter
 initCounter = {tile = 0}
 counter = initCounter
 
-board: Config -> Html Msg
+board: Config ->Html Msg
 board config =
     let
         colStyle =
@@ -65,7 +65,7 @@ board config =
 --                )
 --            )
 
-board_: Config -> Int -> Board -> Color -> List (Html Msg)
+board_: Config -> Int -> Board -> Color -> List(Html Msg)
 board_ config position dicBoard color=
     if position < 9 then
         let
@@ -99,6 +99,7 @@ square config color part col row =
                 ]
              , attribute "data-square" (showField <| field col row)
              , attribute "data-part" (showPartChar <| part)
-             , onClick ClickSquare
+             , onClick (ClickSquare (col, row))
+             --, onClick [ClickSquare]
             ]
             [text (showPart part)]

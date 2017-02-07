@@ -1,6 +1,6 @@
 module Chess.Parts exposing (part, Part, PartType(..), showPart, showPartChar)
 
-import String exposing (cons)
+import String exposing (cons, fromChar)
 import Char exposing (fromCode)
 import Chess.Color exposing (Color(..))
 
@@ -47,7 +47,7 @@ showPart_ {model, color} =
 showPart : Maybe Part -> String
 showPart part =
     case part of
-    Nothing -> cons (fromCode 0020) ""
+    Nothing -> "." -- cons (fromCode 0020) ""
     Just part -> showPart_ part
 
 
@@ -81,7 +81,7 @@ showPartChar_ {model, color} =
 showPartChar : Maybe Part -> String
 showPartChar part =
     case part of
-    Nothing -> cons (fromCode 0020) ""
+    Nothing -> "." -- cons (fromCode 0020) ""
     Just part -> showPartChar_ part
 
 

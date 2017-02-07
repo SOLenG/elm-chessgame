@@ -5,7 +5,9 @@ import Html.Attributes exposing (style, attribute)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onInput, onClick, targetValue)
 import List exposing (..)
-import Http
+import Http exposing (..)
+import Json.Decode as Decode
+import Mouse
 import Chess.Color exposing (..)
 import Chess exposing (..)
 
@@ -23,12 +25,13 @@ main =
       }
 type alias Model = {
     stepNumber : Int
+    , position : (Int, Int)
     }
 type alias Context = { model: Model, dom: Int}
 
 init :(Model, Cmd Msg)
 init  =
-  ( Model 0
+  ( Model 0 (0,0)
   , Cmd.none
   )
 -- UPDATE
@@ -36,9 +39,9 @@ update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
     case msg of
       Chess.GameCreate ->
-        (Model 1, Cmd.none)
-      Chess.ClickSquare ->
-        (Model 2, Cmd.none)
+        (Model 1 (0,0), Cmd.none)
+      Chess.ClickSquare position ->
+        (Model 2 position, Cmd.none)
       Chess.MovePart ->
         (model, Cmd.none)
 
@@ -46,6 +49,9 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.none
+--  Sub.batch
+--        [ Mouse.clicks Chess.ClickSquare
+--        ]
 
 -- VIEW
 view : Model -> Html Msg
@@ -63,7 +69,9 @@ board = div [ attribute "id" "gameboard"]
         ]
 move: Model -> Html Msg
 move model =
-    Debug.log model
-    div [ attribute "id" "gameboard"]
+    let
+        log = Debug.log "Position : " model
+    in
+        div [ attribute "id" "gameboard"]
         [ Chess.board config
         ]
