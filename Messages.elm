@@ -1,9 +1,10 @@
 module Messages exposing (..)
 
-import Chess.Parts exposing (CanMove, Move)
+import Http exposing (..)
+import Models exposing (..)
 
 type Msg
-    = MovePart
-          | ClickSquare (Int, Int, String)
-          | GameCreate
-          | GameSquareSelected (Result Http.Error CanMove)
+    = GameCreate
+          | ClickSquare Position
+          | GameSquareSelected (Result Http.Error (List Moves))
+          | ClickForMove Position

@@ -1,4 +1,4 @@
-module Chess.Parts exposing (part, Part, PartType(..), showPart, showPartChar, CanMove, Move)
+module Chess.Parts exposing (part, Part, PartType(..), showPart, showPartChar, getColorByChar)
 
 import String exposing (cons, fromChar)
 import Char exposing (fromCode)
@@ -39,6 +39,7 @@ showPart__ model color =
     case color of
         White -> getUnicodeWhiteParts model
         Black -> getUnicodeBlackParts model
+        _ -> 0
 
 showPart_ : Part -> String
 showPart_ {model, color} =
@@ -76,21 +77,28 @@ getCharBlackParts model =
 showPartChar_ : Part -> String
 showPartChar_ {model, color} =
     case color of
-            White -> getCharWhiteParts model
-            Black -> getCharBlackParts model
+        White -> getCharWhiteParts model
+        Black -> getCharBlackParts model
+        _ -> ""
 showPartChar : Maybe Part -> String
 showPartChar part =
     case part of
     Nothing -> "." -- cons (fromCode 0020) ""
     Just part -> showPartChar_ part
 
-
--- Moves
-type alias Move = { x : Int, y : Int }
-type alias CanMove = {moves : (List Move)}
-
-directionsB = [(1, 1), (1, -1), (-1, 1), (-1, -1)]
-directionsR = [(0, 1), (0, -1), (1, 0), (-1, 0)]
-directionsN = [(-2, -1), (-2, 1), (-1, -2), (-1, 2), (1, -2), (1, 2), (2, -1), (2, 1)]
-directionsQ = directionsR ++ directionsB
-
+getColorByChar : String -> Color
+getColorByChar partChar =
+    case partChar of
+         "k" -> Black
+         "q" -> Black
+         "r" -> Black
+         "b" -> Black
+         "n" -> Black
+         "p" -> Black
+         "K" -> White
+         "Q" -> White
+         "R" -> White
+         "B" -> White
+         "N" -> White
+         "P" -> White
+         _ -> Red

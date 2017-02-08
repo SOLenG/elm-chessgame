@@ -2,29 +2,44 @@ module Commands exposing (..)
 
 import Http
 import Json.Decode as Decode exposing (field)
-import Chess.Parts exposing (CanMove, Move)
 import Messages exposing (..)
+import Models exposing (..)
+import String exposing (cons, fromChar)
 
 
-fetchAll : Cmd Msg
-fetchAll =
-    Http.get fetchAllUrl collectionDecoder
-        |> Http.send OnFetchAll
+fetchMove : Model -> Cmd Msg
+fetchMove model =
+    Http.get (urlMove model.position) collectionDecoder
+        |> Http.send GameSquareSelected
 
+urlMove : Position -> String
+urlMove position =
+    let
+        url = urlBase  ++ "?x=" ++ (position.x |> toString) ++ "&y=" ++ (position.y |> toString) ++ "&name=" ++ position.part
+        log = Debug.log "value send" (position.x,position.y,position.part, url)
+    in
+        url
 
-fetchAllUrl : String
-fetchAllUrl =
-    "http://localhost:4000/players"
+urlBase : String
+urlBase =
+    "http://localhost:8080/call"
 
-
-collectionDecoder : Decode.Decoder CanMove
+collectionDecoder : Decode.Decoder (List Moves)
 collectionDecoder =
-    Decode.list moveDecoder
+    Decode.list movesDecoder
 
+movesDecoder : Decode.Decoder Moves
+movesDecoder =
+    Decode.map2 Moves
+        (field "Item2" Decode.string)
+        (field "Item1" collectionMoveDecoder)
+
+collectionMoveDecoder : Decode.Decoder (List Move)
+collectionMoveDecoder =
+    Decode.list moveDecoder
 
 moveDecoder : Decode.Decoder Move
 moveDecoder =
-    Decode.map3 Move
-        (field "id" Decode.string)
-        (field "name" Decode.string)
-        (field "level" Decode.int)
+    Decode.map2 Move
+        (field "Item1" Decode.int)
+        (field "Item2" Decode.int)
