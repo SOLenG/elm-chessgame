@@ -51,7 +51,9 @@ updatePartPositionBoard board (x,y,partChar, originField) =
     in
         case part of
             Nothing -> board
-            Just part -> insert (showField <| field x y) part board
+            Just part ->
+                let board1 = remove (originField) board
+                in insert (showField <| field x y) part board1
 
 
 findPart: Int -> Int -> Board -> Maybe Part
